@@ -282,7 +282,7 @@ Follow this chapter if...
 Clone the repo and install required packages if not available.
 
 ```sh
-git clone https://github.com/mawinkler/c1-playground.git
+git clone https://github.com/robi1021/c1-playground.git
 cd c1-playground
 ```
 
