@@ -9,8 +9,8 @@ STAGING=false
 
 # Get config
 CLUSTER_NAME="$(jq -r '.cluster_name' config.json)"
-CS_POLICY_NAME="$(jq -r '.services[] | select(.name=="container_security") | .policy_name' config.json)"
-CS_NAMESPACE="$(jq -r '.services[] | select(.name=="container_security") | .namespace' config.json)"
+CS_POLICY_NAME="$(jq -r '.services[] | select(.name=="container-security") | .policy_name' config.json)"
+CS_NAMESPACE="$(jq -r '.services[] | select(.name=="container-security") | .namespace' config.json)"
 SC_NAMESPACE="$(jq -r '.services[] | select(.name=="smartcheck") | .namespace' config.json)"
 if [ "${STAGING}" = true ]; then
   API_KEY="$(jq -r '.services[] | select(.name=="staging-cloudone") | .api_key' config.json)"
