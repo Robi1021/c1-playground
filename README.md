@@ -99,8 +99,8 @@ Follow this chapter if...
 - are going to use the built in cluster.
 
 First run: 
-  sudo ./tools.sh 
-to install the necessary basic components.
+> sudo ./tools.sh 
+> to install the necessary basic components.
 
 Then add your user to the docker group - using this command:
 > sudo gpasswd -a $USER docker
@@ -110,7 +110,7 @@ Check if /home/user/.docker is created under your user account!
 > If not (e.g. root:root) cange it accordingly with:
 > sudo chown user:user /home/user/.docker -R
 
-> The cluster will get it's own docker network which is configured as follows:
+The cluster will get it's own docker network which is configured as follows:
 >
 > Config | Value
 > ------ | -----
