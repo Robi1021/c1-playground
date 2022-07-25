@@ -98,6 +98,18 @@ Follow this chapter if...
 - you're using the Playground on a Ubuntu machine and
 - are going to use the built in cluster.
 
+First run: 
+  sudo ./tools.sh 
+to install the necessary basic components.
+
+Then add your user to the docker group - using this command:
+  sudo gpasswd -a $USER docker
+Do a logout & re-login to activate the group membership.
+
+Check if /home/user/.docker is created under your user account!
+If not (e.g. root:root) cange it accorfingly with:
+  sudo chown user:user /home/user/.docker -R
+
 > The cluster will get it's own docker network which is configured as follows:
 >
 > Config | Value
@@ -113,7 +125,7 @@ Follow this chapter if...
 > To do this, create or modify `/etc/docker/daemon.json` to include a small subset of probable ips for the registry.
 >
 > ```sh
-> sudo vi /etc/docker/daemon.json
+> sudo nano /etc/docker/daemon.json
 > ```
 >
 > ```json
