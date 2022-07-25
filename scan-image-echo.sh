@@ -40,7 +40,7 @@ echo -e "\e[1;41mdocker run --rm --read-only --cap-drop ALL -v /var/run/docker.s
       --smartcheck-host="${SC_HOST}:${SC_PORT}" \
       --smartcheck-user="${SC_USERNAME}" \
       --smartcheck-password="${SC_PASSWORD}" \
-      --image-pull-auth="${PULL_AUTH}" \
+      --image-pull-auth='"${PULL_AUTH}"' \
       --insecure-skip-registry-tls-verify \
       --insecure-skip-tls-verify\e[1;m"
   fi
