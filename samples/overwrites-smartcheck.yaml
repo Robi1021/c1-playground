@@ -1,0 +1,38 @@
+cloudOne:
+    apiKey: YOU CONTAINER SECURITY APIKEY HERE
+    endpoint: https://container.us-1.cloudone.trendmicro.com
+auth:
+  secretSeed: YOUR-SECRET-HERE
+service:
+  type: LoadBalancer
+  httpsPort: 443
+  httpPort: 80
+networkPolicy:
+  enabled: true
+  additionalWebhookTargetPorts:
+  - 8000
+  - 8888
+  additionalRegistryPorts:
+  - 5000
+  - 8085
+  additionalOutboundPorts: []
+scan:
+  malwareCache:
+    enabled: true
+  rescanProhibitedDuration: 24h
+  imageScan:
+    timeout: 5m
+  malwareScan:
+    # Enable the malware scanner
+    # Default Value: true
+    enabled: true
+      # Set the timeout for the malware scanner.
+      # Default value: 1m
+    timeout: 1m
+malwareScan:
+  ## Enable detail logging on malware-scan pod.
+  ##
+  ## Default value: false
+  verbose:
+    icrc: true
+    trendx: true
