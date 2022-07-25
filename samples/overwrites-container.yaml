@@ -1,0 +1,40 @@
+cloudOne:
+  apiKey: YOU CONTAINER SECURITY APIKEY HERE
+  endpoint: https://container.us-1.cloudone.trendmicro.com
+  admissionController:
+    enabled: true
+    validationNamespaceSelector:
+      matchExpressions:
+      - key: ignoreAdmissionControl
+        operator: DoesNotExist
+    enableKubeSystem: false
+    failurePolicy: Ignore
+  oversight:
+    enabled: true
+    syncPeriod: 600s
+    enableNetworkPolicyCreation: true
+  runtimeSecurity:
+    enabled: true
+  exclusion:
+    ## List of namespaces for which Deploy and Continuous feature will not trigger events.
+    namespaces:
+    - kube-system
+    - calico-system
+    - tigera-operator
+    - smartcheck
+    - container-security
+    - trendmicro-system
+    - trendmicro-smartcheck
+    - local-path-storage
+    - cadvisor
+    - ingress-nginx
+    - registry
+    - metallb-system
+    # - kube-node-lease
+    # - kube-public
+    # - prometheus
+    # - trivy
+    # - falco
+    # - starboard
+scout:
+  excludeSameNamespace: true
