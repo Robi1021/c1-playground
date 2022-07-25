@@ -46,7 +46,7 @@ scan:
   malwareScan:
     # Enable the malware scanner
     # Default Value: true
-    enabled: false
+    enabled: true
       # Set the timeout for the malware scanner.
       # Default value: 1m
     timeout: 1m
