@@ -103,12 +103,12 @@ First run:
 to install the necessary basic components.
 
 Then add your user to the docker group - using this command:
-  sudo gpasswd -a $USER docker
-Do a logout & re-login to activate the group membership.
+> sudo gpasswd -a $USER docker
+> Do a logout & re-login to activate the group membership.
 
 Check if /home/user/.docker is created under your user account!
-If not (e.g. root:root) cange it accorfingly with:
-  sudo chown user:user /home/user/.docker -R
+> If not (e.g. root:root) cange it accordingly with:
+> sudo chown user:user /home/user/.docker -R
 
 > The cluster will get it's own docker network which is configured as follows:
 >
