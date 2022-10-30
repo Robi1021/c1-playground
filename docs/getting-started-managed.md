@@ -71,7 +71,7 @@ Follow this chapter if...
 > Now, run the following script, which creates and assigns the required instance role to your Cloud9 instance.
 >
 > ```sh
-> REPO=https://raw.githubusercontent.com/mawinkler/c1-playground/master
+> REPO=https://raw.githubusercontent.com/robi1021/c1-playground/master
 > sudo apt install -y jq && \
 >   curl -L ${REPO}/tools/cloud9-instance-role.sh | bash
 > ```
