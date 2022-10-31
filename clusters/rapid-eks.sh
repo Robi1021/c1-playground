@@ -21,43 +21,41 @@ function main() {
 ---
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
-
 metadata:
   name: ${CLUSTER_NAME}
   region: ${AWS_REGION}
-
 managedNodeGroups:
 - name: nodegroup
-  desiredCapacity: 2
+  desiredCapacity: 3
   iam:
     withAddonPolicies:
       albIngress: true
       ebs: true
       cloudWatch: true
-      autoscaler: true
+      autoScaler: true
       awsLoadBalancerController: true
-
 secretsEncryption:
   keyARN: ${MASTER_ARN}
 EOF
 
-  # Deploy Calico
+  # Deploy Amazon AWS Calico
   kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/calico-operator.yaml
   kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/calico-crs.yaml
+
+  # Deploy Amazon EBS CSI driver
+  # Link: https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/install.md
+  kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.12"
 
   #aws eks update-kubeconfig --region ${CLUSTER_NAME} --name ${AWS_REGION}
 
   echo "Creating rapid-eks-down.sh script"
   cat <<EOF >rapid-eks-down.sh
 set -e
-
 AWS_REGION=${AWS_REGION}
 CLUSTER_NAME=${CLUSTER_NAME}
 KEY_NAME=${KEY_NAME}
 KEY_ALIAS_NAME=${KEY_ALIAS_NAME}
-
 EXISTING_NAMESPACES=\$(kubectl get ns -o json | jq -r '.items[].metadata.name' | tr '\n' '|')
-
 for NAMESPACE in \$(cat config.json | jq -r '.services[].namespace' | sort | uniq); do
   if [ "\$NAMESPACE" != "null" ] && [[ ! "\$NAMESPACE" =~ "kube-system"|"kube-public"|"kube-node-lease"|"default" ]]; then
     if [[ \$EXISTING_NAMESPACES == *"\$NAMESPACE"* ]]; then
