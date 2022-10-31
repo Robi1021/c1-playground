@@ -32,6 +32,10 @@ managedNodeGroups:
   iam:
     withAddonPolicies:
       albIngress: true
+      ebs: true
+      cloudWatch: true
+      autoscaler: true
+      awsLoadBalancerController: true
 
 secretsEncryption:
   keyARN: ${MASTER_ARN}
