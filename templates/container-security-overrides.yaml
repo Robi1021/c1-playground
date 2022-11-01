@@ -28,8 +28,9 @@ cloudOne:
     - kube-system
     - calico-system
     - tigera-operator
-    - smartcheck
-    - container-security
+    - trendmicro-smartcheck
+    - trendmicro-system
+    - mywhitelistednamespace
     # - kube-node-lease
     # - kube-public
     - prometheus
