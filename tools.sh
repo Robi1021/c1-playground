@@ -102,7 +102,8 @@ function ensure_eksctl() {
   if ! command -v eksctl &>/dev/null; then
     if [ "${OS}" == 'Linux' ]; then
       printf "${RED}${BOLD}%s${RESET}\n" "Installing eksctl on linux"
-      curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.115.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+      #curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.115.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+      curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.95.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
       sudo mv /tmp/eksctl /usr/local/bin
     fi
     if [ "${OS}" == 'Darwin' ]; then
@@ -114,7 +115,8 @@ function ensure_eksctl() {
     printf "${YELLOW}%s${RESET}\n" "Eksctl already installed, ensuring latest version"
     if [ "${OS}" == 'Linux' ]; then
       printf "${RED}${BOLD}%s${RESET}\n" "Ensuring latest version of eksctl on linux"
-      curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.115.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+      #curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.115.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+      curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.95.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
       sudo mv /tmp/eksctl /usr/local/bin
     fi
     if [ "${OS}" == 'Darwin' ]; then
