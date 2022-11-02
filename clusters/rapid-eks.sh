@@ -26,7 +26,7 @@ metadata:
   region: ${AWS_REGION}
 managedNodeGroups:
 - name: nodegroup
-  desiredCapacity: 3
+  desiredCapacity: 2
   iam:
     withAddonPolicies:
       albIngress: true
