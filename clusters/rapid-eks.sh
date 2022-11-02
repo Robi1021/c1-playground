@@ -21,9 +21,11 @@ function main() {
 ---
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
+
 metadata:
   name: ${CLUSTER_NAME}
   region: ${AWS_REGION}
+
 managedNodeGroups:
 - name: nodegroup
   desiredCapacity: 2
@@ -34,6 +36,7 @@ managedNodeGroups:
       cloudWatch: true
       autoScaler: true
       awsLoadBalancerController: true
+
 secretsEncryption:
   keyARN: ${MASTER_ARN}
 EOF
@@ -51,11 +54,14 @@ EOF
   echo "Creating rapid-eks-down.sh script"
   cat <<EOF >rapid-eks-down.sh
 set -e
+
 AWS_REGION=${AWS_REGION}
 CLUSTER_NAME=${CLUSTER_NAME}
 KEY_NAME=${KEY_NAME}
 KEY_ALIAS_NAME=${KEY_ALIAS_NAME}
+
 EXISTING_NAMESPACES=\$(kubectl get ns -o json | jq -r '.items[].metadata.name' | tr '\n' '|')
+
 for NAMESPACE in \$(cat config.json | jq -r '.services[].namespace' | sort | uniq); do
   if [ "\$NAMESPACE" != "null" ] && [[ ! "\$NAMESPACE" =~ "kube-system"|"kube-public"|"kube-node-lease"|"default" ]]; then
     if [[ \$EXISTING_NAMESPACES == *"\$NAMESPACE"* ]]; then
