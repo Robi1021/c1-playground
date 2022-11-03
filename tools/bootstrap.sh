@@ -97,10 +97,14 @@ brew install krew
 
 # Getting Playground repo
 if [ ! -d "c1-playground" ]; then
-  git clone https://github.com/mawinkler/c1-playground.git
+  git clone https://github.com/robi1021/c1-playground.git
 fi
 cd c1-playground
 
-echo Start a new terminal
+echo
+echo STOP HERE AND DONT MOVE NAY FURTHER!
+echo
+echo To go ahead Start a new terminal
+echo or you will not be able to use the environment in the right way!
 sleep 5
 exit
