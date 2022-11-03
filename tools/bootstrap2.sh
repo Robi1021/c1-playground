@@ -95,10 +95,10 @@ brew install krew
 # FIXME: missing syft, grype, kubebox
 
 # Getting Playground repo
-if [ ! -d "c1-playground" ]; then
-  git clone https://github.com/robi1021/c1-playground.git
-fi
-cd c1-playground
+#if [ ! -d "c1-playground" ]; then
+ # git clone https://github.com/robi1021/c1-playground.git
+#fi
+#cd c1-playground
 
 echo Start a new terminal
 sleep 5
