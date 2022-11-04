@@ -102,7 +102,7 @@ fi
 cd c1-playground
 
 echo
-echo STOP HERE AND DONT MOVE NAY FURTHER!
+echo -e "\e[1;41STOP HERE AND DONT MOVE NAY FURTHER!\e[1;m"
 echo
 echo To go ahead Start a new terminal
 echo or you will not be able to use the environment in the right way!
