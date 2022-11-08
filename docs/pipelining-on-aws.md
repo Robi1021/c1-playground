@@ -49,14 +49,13 @@ This script automates the following:
 
 The pipeline builds the container image, pushes it to ECR, scans the image with Smart Check and finally deploys it to EKS.
 
-The deployment obviously can fail if you're running Cloud One Container Security on the cluster, since the image will contain vulnerabilitlies. So it just depends on you and your defined policy.
+The deployment obviously can fail if you're running Cloud One Container Security on the cluster, since the image will contain vulnerabilities. So it just depends on you and your defined policy.
 
 If everything works you'll have a running uploader demo on your cluster. Query the URL by `kubectl -n default get svc` and upload some malware, if you want
 
 ## Further Reading
 
 - AWS EKS Cluster Authentication: <https://docs.aws.amazon.com/eks/latest/userguide/cluster-auth.html>
-- 
 
 ## Tear Down
 

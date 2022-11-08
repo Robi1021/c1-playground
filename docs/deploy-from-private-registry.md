@@ -91,7 +91,7 @@ Deploy Container Security.
 ```sh
 helm install \
     container-security \
-    --values overrides.yaml \
+    --values $PGPATH/overrides.yaml \
     --namespace trendmicro-system \
     --install \
   https://github.com/trendmicro/cloudone-container-security-helm/archive/master.tar.gz
@@ -153,7 +153,7 @@ Deploy Smart Check
 ```sh
 helm install \
     smartcheck \
-    --values overrides.yaml \
+    --values $PGPATH/overrides.yaml \
     --namespace smartcheck \
     --install \
   https://github.com/deep-security/smartcheck-helm/archive/master.tar.gz

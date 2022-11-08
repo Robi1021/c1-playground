@@ -3,43 +3,45 @@
 - [Playground](#playground)
   - [Requirements and Support Matrix](#requirements-and-support-matrix)
     - [Supported Cluster Variants](#supported-cluster-variants)
-    - [Suport Matrix](#suport-matrix)
-  - [Prepare your Environment](#prepare-your-environment)
-  - [Get the Playground](#get-the-playground)
-  - [Configure](#configure)
-  - [Start](#start)
-    - [Create Playgrounds built-in Cluster](#create-playgrounds-built-in-cluster)
-    - [Create GKE, EKS or AKS Clusters](#create-gke-eks-or-aks-clusters)
-  - [Deployments](#deployments)
-  - [Tear Down](#tear-down)
-    - [Tear Down Ubuntu Local, MacOS Local or Cloud9 Local Clusters](#tear-down-ubuntu-local-macos-local-or-cloud9-local-clusters)
-    - [Tear Down Pipelines](#tear-down-pipelines)
-    - [Tear Down GKE, EKS or AKS Clusters](#tear-down-gke-eks-or-aks-clusters)
-  - [Add-Ons](#add-ons)
+    - [Support Matrix](#support-matrix)
+  - [Getting Started](#getting-started)
+    - [Prepare your Environment](#prepare-your-environment)
+    - [Configure](#configure)
+    - [Clusters](#clusters)
+    - [Deployments](#deployments)
+    - [CLI Commands of the Playground](#cli-commands-of-the-playground)
+    - [Good to Know](#good-to-know)
+  - [Add-Ons Documentation](#add-ons-documentation)
   - [Play with the Playground](#play-with-the-playground)
-  - [Demo Scripts](#demo-scripts)
-    - [Deployment Control Demo](#deployment-control-demo)
-    - [Runtime Security Demo](#runtime-security-demo)
-  - [Experimenting](#experimenting)
-    - [Migrate](#migrate)
-  - [Testing the Playground](#testing-the-playground)
-  - [TODO](#todo)
+    - [Demo Scripts](#demo-scripts)
+      - [Deployment Control Demo](#deployment-control-demo)
+      - [Runtime Security Demo](#runtime-security-demo)
+    - [Experimenting](#experimenting)
+      - [Migrate](#migrate)
 
 Ultra fast and slim kubernetes playground.
 
-The playground runs on local or Cloud9 based Ubuntu servers, GKE, AKS, EKS and most parts on MacOS as well.
-
 ***Latest News***
 
-- The Playground got a menu :-).  
-  Run it via `./playground`.
-  ![alt text](images/playground-menu.png "menu")
-- The playground now supports CI/CD pipelining on AWS. Azure and GCP to come.
-  - Container image build, image scanning and deployment to EKS with Application Security integrated.
+!!! Announcing the ***Playground SIMPLICITY*** !!!
+
+In a nutshell:
+
+- Bootstrapping directly from the clouds. It will attempt to upgrade already installed tools to the latest available version.  
+
+  ```sh
+  curl -fsSL https://raw.githubusercontent.com/mawinkler/c1-playground/simplicity/bin/playground | bash
+  ```
+
+- No `git clone`
+- No `daemon.json` config
+- It got a menu :-). Run it via `playground`.
+- Bootstrapping has never been easier!
+  ![alt text](images/video-bootstrap.gif "menu")
 
 ## Requirements and Support Matrix
 
-> ***Note:*** The Playgound is designed to work on these operating systems
+> ***Note:*** The Playground is designed to work on these operating systems
 >
 > - Ubuntu Bionic and newer
 > - Cloud9 with Ubuntu
@@ -61,11 +63,7 @@ In addition to the local cluster, it is also possible to use most functionality 
 
 Before or after you've authenticated to the cloud, be sure to install the required tools as described in the next section.
 
-Within the directory `clusters` are scripts to rapidly create a kubernetes cluster on the three major public clouds. This comes in handy, if you want to play on these public clouds or have no possibility to run an Ubuntu or MacOS.
-
-> ***NOTE:*** Do not run `up.sh` or `down.sh` when using these clusters.
-
-### Suport Matrix
+### Support Matrix
 
 Add-On | **Ubuntu**<br>*Local* | **MacOS**<br>*Local* | **Cloud9**<br>*Local* | GKE<br>*Cloud* | EKS<br>*Cloud* | AKS<br>*Cloud*
 ------ | ------ | ------ | ----- | --- | --- | ---
@@ -92,152 +90,93 @@ Pipelines | | | | | X | |
 
 *(2)* Currently in beta.
 
-## Prepare your Environment
+## Getting Started
 
-In the following chapters I'm describing on how to prepare for the Playground in various environments. Choose one and proceed afterwards with section [Get the Playground](#get-the-playground).
+### Prepare your Environment
+
+In the following chapters I'm describing on how to bootstrap Playground in various environments.
 
 If you plan to use the built in cluster of the Playground, please follow
 
-- [Getting Started with built in cluster](docs/getting-started-kind.md)
+- [Getting Started with built in cluster](docs/getting-started-kind-simplicity.md)
 
 To prepare for the use with a managed cluster, please follow
 
-- [Getting Started with managed clusters](docs/getting-started-managed.md)
+- [Getting Started with managed clusters](docs/getting-started-managed-simplicity.md)
 
-## Get the Playground
-
-Clone the repo and install required packages if not available.
+After bootstrapping run
 
 ```sh
-git clone https://github.com/mawinkler/c1-playground.git
-cd c1-playground
+playground
 ```
 
-In all of these possible environments you're going to run a script called `tools.sh` either on the host running the playground cluster or the host running the CLI tools of the public clouds. This will ensure you have the latest versions of
+from anywhere on your system.
 
-- `brew` (MacOS only),
-- `docker` or `Docker for Mac`.
-- `kubectl`,
-- `eksctl`,
-- `kustomize`,
-- `helm`,
-- `kind`,
-- `kubebox`,
-- `stern`,
-- `krew`,
-- `syft`,
-- `grype`
+### Configure
 
-installed.
+From within the main menu choose `Edit Configuration`
 
-Run it with
+Please follow the documentation [here](docs/getting-started-configuration-simplicity.md).
 
-```sh
-./tools.sh
-```
+### Clusters
 
-The script will attempt to upgrade already installed tools to the latest available version.
+From within the main menu choose `Create Cluster...` and select your desired type.
 
-## Configure
+Depending on where you have deployed the playground you potentially need to ensure an authenticated cloud CLI.
 
-Please follow the documentation [here](docs/getting-started-configuration.md).
+Prerequisites | **Local Cluster** | GKE | EKS | AKS
+------ | ------ | ------ | ----- | ---
+Ubuntu, MacOS | n/a | `gcloud` | `aws` w/ Access Keys | `az`
+Cloud9 | n/a | `gcloud` | `aws` w/ Instance Role (1) | `az`
 
-## Start
+*(1)* The instance role is automatically created and assigned to the Cloud9 instance during bootstrapping.
 
-If you want to deploy the built-in cluster go through the next chapter. If you want to use a cloud managed cluster jump to [Create GKE, EKS or AKS Clusters](#create-gke-eks-or-aks-clusters).
+Then choose your cluster variant to create.
 
-### Create Playgrounds built-in Cluster
+If you want to tear down your cluster choose `Tear Down Cluster` from within the menu. This will destroy the last cluster you created.
 
-Simply run
+> ***Note:*** Cluster versions are defined by the current defaults of the hyper scaler. The built-in cluster is currently version fixed to kubernetes 1.24.7.
 
-```sh
-# Local built-in Cluster
-./up.sh
-```
+### Deployments
 
-Typically, you want to deploy the cluster registry next. Do this by running
+The playground provides a couple of scripts which deploy pre-configured versions of several products. This includes currently:
 
-```sh
-./deploy-registry.sh
-```
+- Container Security
+- Smart Check
+- Prometheus & Grafana
+- Starboard
+- Falco Runtime Security
+- Harbor
+- Open Policy Agent
+- Gatekeeper
 
-You can find the authentication instructions within the file `services`.
-
-Now, head over to [Deployments](#deployments).
-
-### Create GKE, EKS or AKS Clusters
-
-Run one of the following scripts to quickly create a cluster in the clouds.
-
-```sh
-# GKE
-./clusters/rapid-gke.sh
-
-# AKS
-./clusters/rapid-aks.sh
-
-# EKS
-./clusters/rapid-eks.sh
-```
-
-You don't need to create a registry here since you're going to use the cloud provided registries GCR, ACR or ECR.
-
-## Deployments
-
-The playground provides a couple of scripts which deploy preconfigured versions of several products. This includes currently:
-
-- Container Security (`./deploy-container-security.sh`)
-- Smart Check (`./deploy-smartcheck.sh`)
-- Prometheus & Grafana (`./deploy-prometheus.sh`)
-- Starboard (`./deploy-starboard.sh`)
-- Falco Runtime Security (`./deploy-falco.sh`)
-- Open Policy Agent (`./deploy-opa.sh`)
-- Gatekeeper (`./deploy-gatekeeper.sh`)
-- Harbor (`./deploy-harbor.sh`)
+Deploy the products via `Deploy...` in the menu.
 
 In addition to the above the playground now supports AWS CodePipelines. The pipeline builds a container image based on a sample repo, scans it with Smart Check and deploys it with integrated Cloud One Application Security to the EKS cluster.
 
 The pipeline requires an EKS with a deployed Smart Check. If everything has been set up, running the script `./deploy-pipeline-aws.sh` should do the trick :-). When you're done with the pipeline run the generated script `./pipeline-aws-down.sh` to tear it down.
 
-## Tear Down
+### CLI Commands of the Playground
 
-### Tear Down Ubuntu Local, MacOS Local or Cloud9 Local Clusters
+Besides the obvious cli tools like `kubectl`, `docker`, etc. the offers you additional commands shown in the table below:
 
-```sh
-./down.sh
-```
+Command | Function
+------- | --------
+playground | The playground's menu
+scan-image | Scan an image using Smart Check<br>Example:<br>`scan-image nginx:latest`
+scan-namespace | Scans all images in use within the current namespace<br>Example:<br>`kubectl config set-context --current --namespace <NAMESPACE>`<br>`scan-namespace`
+collect-logs-sc | Collects logs from Smart Check
+collect-logs-cs | Collects logs from Container Security
+stern | Tail logs from multiple pods simultaneously<br>Example:<br>`stern -n trendmicro-system . -t -s2m`
+syft | See [github.com/anchore/syft](https://github.com/anchore/syft)
+grype | See [github.com/anchore/grype](https://github.com/anchore/grype)
+k9s | See [k9scli.io](https://k9scli.io/)
 
-### Tear Down Pipelines
+### Good to Know
 
-Run one of the following scripts to quickly tear down a pipeline in the clouds. These scripts are created automatically by the pipeline scripts.
+If you're curious check out the `templates`-directory which holds the configuration of all components. Modify at your own risk ;-).
 
-```sh
-# GCP
-# ./pipeline-gcp-down.sh
-
-# AWS
-./pipeline-aws-down.sh
-
-# Azure
-# ./pipeline-azure-down.sh
-```
-
-### Tear Down GKE, EKS or AKS Clusters
-
-Run one of the following scripts to quickly tear down a cluster in the clouds. These scripts are created automatically by the cluster scripts.
-
-```sh
-# GKE
-./rapid-gke-down.sh
-
-# AKS
-./rapid-aks-down.sh
-
-# EKS
-./rapid-eks-down.sh
-```
-
-## Add-Ons
+## Add-Ons Documentation
 
 The documentation for the add-ons are located inside the `./docs` directory.
 
@@ -256,6 +195,8 @@ The documentation for the add-ons are located inside the `./docs` directory.
 
 ## Play with the Playground
 
+***TODO UPDATE***
+
 If you wanna play within the playground and you're running it either on Linux or Cloud9, follow the lab guide [Play with the Playground (on Linux & Cloud9)](docs/play-on-linux.md).
 
 If you're running the playground on MacOS, follow the lab guide [Play with the Playground (on MacOS)](docs/play-on-macos.md).
@@ -266,9 +207,9 @@ If you want to play with pipelines, the Playground now supports CodePipeline on 
 
 Lastly, there is a [guide](docs/play-with-falco.md) to experiment with the runtime rules built into the playground to play with Falco. The rule set of the playground is located [here](falco/playground_rules.yaml).
 
-## Demo Scripts
+### Demo Scripts
 
-The Playground supports automated scripts to demonstrate functionalies of deployments. Currently, there are two scripts available showing some capabilities of Cloud One Container Security.
+The Playground supports automated scripts to demonstrate functionalities of deployments. Currently, there are two scripts available showing some capabilities of Cloud One Container Security.
 
 To run them, ensure to have an EKS cluster up and running and have Smart Check and Container Security deployed.
 
@@ -282,7 +223,7 @@ After configuring the policy and rule set as shown below, you can run the demos 
 ./demos/demo-c1cs-rt.sh
 ```
 
-### Deployment Control Demo
+#### Deployment Control Demo
 
 > ***Storyline:*** A developer wants to try out a new `nginx` image but fails since the image has critical vulnerabilities, he tries to deploy from docker hub etc. Lastly he tries to attach to the pod, which is prevented by Container Security.
 
@@ -319,13 +260,13 @@ To prepare for the demo verify that the cluster policy is set as shown below:
 
 Most of it should already configured by the `deploy-container-security.sh` script.
 
-Run the demo with
+Run the demo being in the playground directory with
 
 ```sh
 ./demos/demo-c1cs-dc.sh
 ```
 
-### Runtime Security Demo
+#### Runtime Security Demo
 
 > ***Storyline:*** A kubernetes admin newbie executes some information gathering about the kubernetes cluster from within a running pod. Finally, he gets kicked by Container Security because of the `kubectl` usage.
 
@@ -341,7 +282,7 @@ Change:
 
 Additionally, set the runtime rule `(T1543)Launch Package Management Process in Container` to ***Log***. Normally you'll find that rule in the `*_error` ruleset.
 
-Run the demo with
+Run the demo being in the playground directory with
 
 ```sh
 ./demos/demo-c1cs-rt.sh
@@ -351,11 +292,11 @@ The demo starts locally on your system, but creates a pod in the `default` names
 
 The Dockerfile for this image is in `./demos/pod/Dockerfile` for you to verify, but you do not need to build it yourself.
 
-## Experimenting
+### Experimenting
 
 Working with Kubernetes is likely to raise the one or the other challenge.
 
-### Migrate
+#### Migrate
 
 This tries to solve the challenge to migrate workload of an existing cluster using public image registries to a trusted, private one (without breaking the services).
 
@@ -379,54 +320,4 @@ This second script updates the saved manifests in regards the image location to 
 
 The image get's then pulled from the public repo and pushed to the internal one. This is followed by an image scan and the redeployment.
 
-> Note: at the time of writing the only supported private registry is the internal one.
-
-## Testing the Playground
-
-The Playground uses [Bats](https://github.com/sstephenson/bats) for unit testing.
-
-Install Bats with
-
-```sh
-# Linux
-npm install -g bats
-
-# MacOS
-brew install bats
-```
-
-Unit tests are in `./tests`.
-
-To run a full tests for a cluster type simply run
-
-```sh
-# Local Kind cluster
-./test-kind-linux.sh
-
-# GKE
-./test-gke.sh
-
-# AKS
-./test-aks.sh
-
-# EKS
-./test-eks.sh
-```
-
-while being in the playground directory. Make sure, that you're authenticated on AWS, GCP and / or Azure beforehand.
-
-The following playground modules will be executed:
-
-```
-└── Build Cluster
-    ├── (Registry)
-    ├── Falco
-    ├── Smart Check
-    ├── Smart Check Scan
-    ├── Container Security
-    └── Destroy cluster
-```
-
-## TODO
-
-- ...
+> ***Note:*** at the time of writing the only supported private registry is the internal one.

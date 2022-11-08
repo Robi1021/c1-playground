@@ -410,7 +410,7 @@ $ curl nginx
 
 It should time out.
 
-> Note: The isolation of workload on a kubernetes cluster requires a pod network, which does support network policies. Neither the default cni `kindnet` on kind clusters nor `flannel` do support that. That's the reason why the playground uses `calico` as the pod network.
+> ***Note:*** The isolation of workload on a kubernetes cluster requires a pod network, which does support network policies. Neither the default cni `kindnet` on kind clusters nor `flannel` do support that. That's the reason why the playground uses `calico` as the pod network.
 
 ## Namespace Exclusions
 
