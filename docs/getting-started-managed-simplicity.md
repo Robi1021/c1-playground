@@ -67,7 +67,7 @@ Follow this chapter if...
 > - Go to the Cloud9 service
 > - Select `[Create Cloud9 environment]`
 > - Name it as you like
-> - Choose `[t3.xlarge]` for instance type and
+> - Choose `[t3.medium]` for instance type and
 > - `Ubuntu 18.04 LTS` as the platform
 > - For the rest take all default values and click `[Create environment]`
 >
