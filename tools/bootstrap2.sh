@@ -84,7 +84,7 @@ function ensure_bashrc() {
 function ensure_playground() {
   # # Getting Playground repo
   if [ ! -d "c1-playground" ]; then
-    git clone --branch simplicity https://github.com/robi1021/c1-playground.git
+    git clone https://github.com/robi1021/c1-playground.git
   else
     cd c1-playground
     git pull
@@ -588,6 +588,6 @@ if [ "${PACKAGE_MANAGER}" != "brew" ]; then
   ensure_krew
 fi
 
-# echo Start a new terminal
+echo Start a new terminal
 # sleep 5
 # exit
