@@ -24,18 +24,7 @@ cloudOne:
     enabled: true
   exclusion:
     ## List of namespaces for which Deploy and Continuous feature will not trigger events.
-    namespaces:
-    - kube-system
-    - calico-system
-    - tigera-operator
-    - smartcheck
-    - container-security
-    # - kube-node-lease
-    # - kube-public
-    - prometheus
-    - trivy
-    - falco
-    - starboard
+    namespaces: [ kube-system, local-path-storage, registry, metallb-system, ingress-nginx, calico-system, calico-apiserver, tigera-operator, trendmicro-smartcheck, trendmicro-security, cadvisor, prometheus, trivy, falco, starboard, istio-system ]
 # proxy:
 #   httpProxy: 172.17.0.1:3128
 #   httpsProxy: 172.17.0.1:3128
