@@ -105,10 +105,24 @@ function create_cluster_darwin() {
 #######################################
 function create_load_balancer() {
   printf '%s\n' "Create load balancer"
-   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml -o yaml
-   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml -o yaml
+   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+   #kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml -o yaml
+   #kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml -o yaml
    kubectl create secret generic -n metallb-system memberlist \
     --from-literal=secretkey="$(openssl rand -base64 128)" -o yaml
+
+  printf '%s' "Waiting for calico to be ready"
+  for i in {1..120} ; do
+    sleep 2
+    DEPLOYMENTS_TOTAL=$(kubectl -n calico-apiserver get deployments 2> /dev/null | wc -l)
+    DEPLOYMENTS_READY=$(kubectl -n calico-apiserver get deployments 2> /dev/null | grep -E "([0-9]+)/\1" | wc -l)
+    if [[ $((${DEPLOYMENTS_TOTAL} - 1)) -eq ${DEPLOYMENTS_READY} ]] ; then
+      break
+    fi
+    printf '%s' "."
+  done
+  printf '\n'
+
   ADDRESS_POOL=$(kubectl get nodes -o json | \
     jq -r '.items[0].status.addresses[] | select(.type=="InternalIP") | .address' | \
     sed -r 's|([0-9]*).([0-9]*).*|\1.\2.255.1-\1.\2.255.250|')
@@ -160,9 +174,9 @@ function create_ingress_controller() {
 # Outputs:
 #   None
 #######################################
-function deploy_cadvisor() {
-  kubectl apply -f https://raw.githubusercontent.com/astefanutti/kubebox/master/cadvisor.yaml
-}
+#function deploy_cadvisor() {
+#  kubectl apply -f https://raw.githubusercontent.com/astefanutti/kubebox/master/cadvisor.yaml
+#}
 
 #######################################
 # Deploys Calico pod network
