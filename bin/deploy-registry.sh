@@ -68,6 +68,7 @@ function create_auth_secret() {
 
   mkdir -p $PGPATH/auth
   htpasswd -bBc $PGPATH/auth/htpasswd ${USERNAME} ${PASSWORD}
+  kubectl --ignore-not-found=true --namespace ${NAMESPACE} delete secret auth-secret
   kubectl --namespace ${NAMESPACE} create secret generic auth-secret --from-file=$PGPATH/auth/htpasswd -o yaml
   printf '%s\n' " 🍿"
 }
@@ -108,6 +109,7 @@ function create_tls_secret_linux() {
   openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes \
     -keyout $PGPATH/certs/tls.key -out $PGPATH/certs/tls.crt \
     -subj "/CN=${EXTERNAL_IP}" -extensions san -config $PGPATH/certs/req-reg.conf
+  kubectl --ignore-not-found=true --namespace ${NAMESPACE} delete secret certs-secret
   kubectl --namespace ${NAMESPACE} create secret tls certs-secret --cert=$PGPATH/certs/tls.crt --key=$PGPATH/certs/tls.key -o yaml
   printf '%s\n' " 🍵"
 }
@@ -141,6 +143,7 @@ function create_tls_secret_darwin() {
   openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes \
     -keyout $PGPATH/certs/tls.key -out $PGPATH/certs/tls.crt \
     -subj "/CN=${EXTERNAL_IP}" -extensions san -config $PGPATH/certs/req-reg.conf &> /dev/null
+  kubectl --ignore-not-found=true --namespace ${NAMESPACE} delete secret certs-secret
   kubectl --namespace ${NAMESPACE} create secret tls certs-secret --cert=$PGPATH/certs/tls.crt --key=$PGPATH/certs/tls.key -o yaml
   printf '%s\n' " 🍵"
 }
