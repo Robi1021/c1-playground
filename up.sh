@@ -108,6 +108,7 @@ function create_load_balancer() {
    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
    #kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml -o yaml
    #kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml -o yaml
+   
    kubectl create secret generic -n metallb-system memberlist \
     --from-literal=secretkey="$(openssl rand -base64 128)" -o yaml
 
@@ -127,7 +128,8 @@ function create_load_balancer() {
     jq -r '.items[0].status.addresses[] | select(.type=="InternalIP") | .address' | \
     sed -r 's|([0-9]*).([0-9]*).*|\1.\2.255.1-\1.\2.255.250|')
   ADDRESS_POOL=${ADDRESS_POOL} \
-    envsubst <templates/kind-load-balancer-config.yaml | kubectl apply -f - -o yaml
+    envsubst <templates/kind-load-balancer-addresspool.yaml | kubectl apply -f - -o yaml
+    envsubst <templates/kind-load-balancer-l2adv.yaml | kubectl apply -f - -o yaml
   printf '%s\n' "Load balancer created 🍹"
 }
 
@@ -143,6 +145,7 @@ function create_load_balancer() {
 function create_ingress_controller() {
   # ingress nginx
   printf '%s\n' "Create ingress controller"
+  
   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml -o yaml
   # wating for the cluster be ready
   printf '%s' "Wating for the cluster be ready"
@@ -220,7 +223,7 @@ function main() {
   configure_networking
   if is_linux ; then
     create_cluster_linux
-    deploy_cadvisor
+   # deploy_cadvisor
     deploy_calico
     create_load_balancer
     create_ingress_controller
