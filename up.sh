@@ -230,7 +230,7 @@ function main() {
 
   if is_darwin ; then
     create_cluster_darwin
-    deploy_cadvisor
+   # deploy_cadvisor
     deploy_calico
     create_load_balancer
     create_ingress_controller
