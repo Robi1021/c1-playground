@@ -105,15 +105,31 @@ function create_cluster_darwin() {
 #######################################
 function create_load_balancer() {
   printf '%s\n' "Create load balancer"
-   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml -o yaml
-   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml -o yaml
+   kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+   #kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/namespace.yaml -o yaml
+   #kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.5/manifests/metallb.yaml -o yaml
+   
    kubectl create secret generic -n metallb-system memberlist \
     --from-literal=secretkey="$(openssl rand -base64 128)" -o yaml
+
+  printf '%s' "Waiting for calico to be ready"
+  for i in {1..120} ; do
+    sleep 2
+    DEPLOYMENTS_TOTAL=$(kubectl -n calico-apiserver get deployments 2> /dev/null | wc -l)
+    DEPLOYMENTS_READY=$(kubectl -n calico-apiserver get deployments 2> /dev/null | grep -E "([0-9]+)/\1" | wc -l)
+    if [[ $((${DEPLOYMENTS_TOTAL} - 1)) -eq ${DEPLOYMENTS_READY} ]] ; then
+      break
+    fi
+    printf '%s' "."
+  done
+  printf '\n'
+
   ADDRESS_POOL=$(kubectl get nodes -o json | \
     jq -r '.items[0].status.addresses[] | select(.type=="InternalIP") | .address' | \
     sed -r 's|([0-9]*).([0-9]*).*|\1.\2.255.1-\1.\2.255.250|')
   ADDRESS_POOL=${ADDRESS_POOL} \
-    envsubst <templates/kind-load-balancer-config.yaml | kubectl apply -f - -o yaml
+    envsubst <templates/kind-load-balancer-addresspool.yaml | kubectl apply -f - -o yaml
+    envsubst <templates/kind-load-balancer-l2adv.yaml | kubectl apply -f - -o yaml
   printf '%s\n' "Load balancer created 🍹"
 }
 
@@ -129,6 +145,7 @@ function create_load_balancer() {
 function create_ingress_controller() {
   # ingress nginx
   printf '%s\n' "Create ingress controller"
+  
   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml -o yaml
   # wating for the cluster be ready
   printf '%s' "Wating for the cluster be ready"
@@ -160,9 +177,9 @@ function create_ingress_controller() {
 # Outputs:
 #   None
 #######################################
-function deploy_cadvisor() {
-  kubectl apply -f https://raw.githubusercontent.com/astefanutti/kubebox/master/cadvisor.yaml
-}
+#function deploy_cadvisor() {
+#  kubectl apply -f https://raw.githubusercontent.com/astefanutti/kubebox/master/cadvisor.yaml
+#}
 
 #######################################
 # Deploys Calico pod network
@@ -174,13 +191,18 @@ function deploy_cadvisor() {
 #   None
 #######################################
 function deploy_calico() {
-  kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
-  # By default, Calico pods fail if the Kernel's Reverse Path Filtering (RPF) check
-  # is not enforced. This is a security measure to prevent endpoints from spoofing
-  # their IP address.
-  # The RPF check is not enforced in Kind nodes. Thus, we need to disable the
-  # Calico check by setting an environment variable in the calico-node DaemonSet
-  kubectl -n kube-system set env daemonset/calico-node FELIX_IGNORELOOSERPF=true
+  # with kind 0.11.1
+  # kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
+  # # By default, Calico pods fail if the Kernel's Reverse Path Filtering (RPF) check
+  # # is not enforced. This is a security measure to prevent endpoints from spoofing
+  # # their IP address.
+  # # The RPF check is not enforced in Kind nodes. Thus, we need to disable the
+  # # Calico check by setting an environment variable in the calico-node DaemonSet
+  # kubectl -n kube-system set env daemonset/calico-node FELIX_IGNORELOOSERPF=true
+
+  # with kind 0.14.0
+  kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
+  kubectl create -f https://projectcalico.docs.tigera.io/manifests/custom-resources.yaml
 }
 
 #######################################
@@ -201,7 +223,7 @@ function main() {
   configure_networking
   if is_linux ; then
     create_cluster_linux
-    deploy_cadvisor
+   # deploy_cadvisor
     deploy_calico
     create_load_balancer
     create_ingress_controller
@@ -211,7 +233,7 @@ function main() {
 
   if is_darwin ; then
     create_cluster_darwin
-    deploy_cadvisor
+   # deploy_cadvisor
     deploy_calico
     create_load_balancer
     create_ingress_controller

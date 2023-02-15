@@ -5,21 +5,16 @@ set -e
 # Source helpers
 . ./playground-helpers.sh
 
-STAGING=false
-
 # Get config
 CLUSTER_NAME="$(jq -r '.cluster_name' config.json)"
 CS_POLICY_NAME="$(jq -r '.services[] | select(.name=="container_security") | .policy_name' config.json)"
 CS_NAMESPACE="$(jq -r '.services[] | select(.name=="container_security") | .namespace' config.json)"
 SC_NAMESPACE="$(jq -r '.services[] | select(.name=="smartcheck") | .namespace' config.json)"
-if [ "${STAGING}" = true ]; then
-  API_KEY="$(jq -r '.services[] | select(.name=="staging-cloudone") | .api_key' config.json)"
-  REGION="$(jq -r '.services[] | select(.name=="staging-cloudone") | .region' config.json)"
-  INSTANCE="$(jq -r '.services[] | select(.name=="staging-cloudone") | .instance' config.json)"
-else
-  API_KEY="$(jq -r '.services[] | select(.name=="cloudone") | .api_key' config.json)"
-  REGION="$(jq -r '.services[] | select(.name=="cloudone") | .region' config.json)"
-  INSTANCE="$(jq -r '.services[] | select(.name=="cloudone") | .instance' config.json)"
+API_KEY="$(jq -r '.services[] | select(.name=="cloudone") | .api_key' config.json)"
+REGION="$(jq -r '.services[] | select(.name=="cloudone") | .region' config.json)"
+INSTANCE="$(jq -r '.services[] | select(.name=="cloudone") | .instance' config.json)"
+if [ ${INSTANCE} = null ]; then
+  INSTANCE=cloudone
 fi
 
 mkdir -p overrides
@@ -56,9 +51,11 @@ function create_namespace() {
 function whitelist_namsspaces() {
   # whitelist some namespace for container security
   kubectl label namespace kube-system --overwrite ignoreAdmissionControl=true
-  kubectl label namespace local-path-storage --overwrite ignoreAdmissionControl=true
-  kubectl label namespace ingress-nginx --overwrite ignoreAdmissionControl=true
   kubectl label namespace ${CS_NAMESPACE} --overwrite ignoreAdmissionControl=true
+  if ! is_gke && ! is_aks && ! is_eks ; then
+    kubectl label namespace local-path-storage --overwrite ignoreAdmissionControl=true
+    kubectl label namespace ingress-nginx --overwrite ignoreAdmissionControl=true
+  fi
 }
 
 #######################################
@@ -162,8 +159,6 @@ function cluster_rulesets() {
 # Outputs:
 #   API_KEY_ADMISSION_CONTROLLER
 #   CS_CLUSTERID
-#   AP_KEY
-#   AP_SECRET
 #######################################
 function create_cluster_object() {
   CLUSTER_ID=$(
@@ -180,7 +175,6 @@ function create_cluster_object() {
     RESULT=$(
       CLUSTER_NAME=${CLUSTER_NAME//-/_} \
         CS_POLICYID=${CS_POLICYID} \
-        DEPLOY_RT=${DEPLOY_RT} \
         envsubst <templates/container-security-cluster-object.json |
           curl --silent --location --request POST 'https://container.'${REGION}'.'${INSTANCE}'.trendmicro.com/api/clusters' \
           --header @overrides/cloudone-header.txt \
@@ -188,8 +182,6 @@ function create_cluster_object() {
     )
     API_KEY_ADMISSION_CONTROLLER=$(echo ${RESULT} | jq -r ".apiKey")
     CS_CLUSTERID=$(echo ${RESULT} | jq -r ".id")
-    AP_KEY=$(echo ${RESULT} | jq -r ".runtimeKey")
-    AP_SECRET=$(echo ${RESULT} | jq -r ".runtimeSecret")
   fi
 }
 
