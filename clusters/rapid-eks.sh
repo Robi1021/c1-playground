@@ -46,15 +46,15 @@ EOF
   # kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/master/config/master/calico-crs.yaml
 helm repo add projectcalico https://docs.tigera.io/calico/charts
   helm repo update
-  mkdir -p $PGPATH/overrides
-  echo '{ installation: {kubernetesProvider: EKS }}' > $PGPATH/overrides/tigera-operator-overrides.yaml
+  mkdir -p overrides
+  echo '{ installation: {kubernetesProvider: EKS }}' > overrides/tigera-operator-overrides.yaml
   helm upgrade \
     calico \
     --version v3.25.0 \
     --namespace tigera-operator \
     --create-namespace \
     --install \
-    -f $PGPATH/overrides/tigera-operator-overrides.yaml \
+    -f overrides/tigera-operator-overrides.yaml \
     projectcalico/tigera-operator
 
   # Deploy Amazon EBS CSI driver
