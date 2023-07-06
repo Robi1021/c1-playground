@@ -75,7 +75,14 @@ else
 fi
 
 # Resizing Cloud9 disk
-curl -fsSL ${REPO}/tools/cloud9-resize.sh | bash
+      DIR="/home/ubuntu/environment/"
+      if [ -d "$DIR" ]; then
+      ### Take action if $DIR exists ###
+      curl -fsSL ${REPO}/tools/cloud9-resize.sh | bash 
+      else
+      ###  Control will jump here if $DIR does NOT exists ###
+      echo Done
+      fi
 
 # Installing packages
 NONINTERACTIVE=1 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
