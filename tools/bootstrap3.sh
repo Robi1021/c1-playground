@@ -104,7 +104,7 @@ function ensure_playground() {
     git pull
   fi
   # Source helpers
-  .  $PGPATH/bin/playground-helpers.sh
+  .  $PGPATH/playground-helpers.sh
 }
 
 # Installing essentials
