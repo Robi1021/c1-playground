@@ -231,7 +231,12 @@ function ensure_ec2_instance_role() {
         echo "IAM role NOT valid"
         exit 0
       fi
-  
+    fi
+  else
+    echo Not running on Cloud9
+  fi
+}
+function expand_disc_on_c9() {
       # Resizing Cloud9 disk
       DIR="/home/ubuntu/environment/"
       if [ -d "$DIR" ]; then
@@ -241,10 +246,6 @@ function ensure_ec2_instance_role() {
       ###  Control will jump here if $DIR does NOT exists ###
       echo Not running on Cloud9
       fi
-    fi
-  else
-    echo Not running on Cloud9
-  fi
 }
 
 function ensure_docker() {
@@ -504,6 +505,7 @@ ensure_bashrc
 ensure_playground
 ensure_essentials
 ensure_ec2_instance_role
+expand_disc_on_c9
 ensure_docker
 if [ "${PACKAGE_MANAGER}" == "brew" ]; then
   ensure_formulae
