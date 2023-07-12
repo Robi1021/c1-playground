@@ -93,6 +93,9 @@ In all of these possible environments you're going to run a script called `tools
 
 - `helm`,
 - `kind`,
+- `docker`,
+- `eksctl`,
+- `kubectl`,
 
 installed.
 
