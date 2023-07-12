@@ -12,7 +12,7 @@
     - [Create GKE, EKS or AKS Clusters](#create-gke-eks-or-aks-clusters)
   - [Deployments](#deployments)
   - [Tear Down](#tear-down)
-    - [Tear Down Ubuntu Local, MacOS Local or Cloud9 Local Clusters]
+    - [Tear Down Ubuntu Local, MacOS Local or Cloud9 Local Clusters](#tear-down-ubuntu-local-macos-local-or-cloud9-local-clusters)
     - [Tear Down GKE, EKS or AKS Clusters](#tear-down-gke-eks-or-aks-clusters)
   - [Play with the Playground](#play-with-the-playground)
   - [Demo Scripts](#demo-scripts)
@@ -58,7 +58,7 @@ Add-On | **Ubuntu**<br>*Local* | **MacOS**<br>*Local* | **Cloud9**<br>*Local* | 
 ------ | ------ | ------ | ----- | --- | --- | ---
 Scanning Scripts | X | X | X | X | X | X
 C1CS Admission & Continuous | X | X | X | X | X | X
-C1CS Runtime Security | X (1) | | X | X | X | X
+C1CS Runtime Security | X | | X | X | X | X
 
 *Local* means, the cluster will run on the machine you're working on.
 
@@ -66,7 +66,6 @@ C1CS Runtime Security | X (1) | | X | X | X | X
 
 *(1)* Depending on the Kernel in use. Currently the kernels 4.15.x and 5.4.x are supported.
 
-*(2)* Currently in beta.
 
 ## Prepare your Environment
 
@@ -91,15 +90,8 @@ cd c1-playground
 
 In all of these possible environments you're going to run a script called `tools.sh` either on the host running the playground cluster or the host running the CLI tools of the public clouds. This will ensure you have the latest versions of
 
-
-- `kustomize`,
 - `helm`,
 - `kind`,
-- `kubebox`,
-- `stern`,
-- `krew`,
-- `syft`,
-- `grype`
 
 installed.
 
