@@ -353,15 +353,15 @@ function ensure_linkerd() {
 }
 
 ensure_essentials
-#ensure_docker
+ensure_docker
 #ensure_kubectl
 #ensure_eksctl
 #ensure_kustomize
-#ensure_helm
-#ensure_kind
-ensure_kubebox
-ensure_stern
-ensure_krew
-ensure_syft
-ensure_grype
+ensure_helm
+ensure_kind
+#ensure_kubebox
+#ensure_stern
+#ensure_krew
+#ensure_syft
+#ensure_grype
 # ensure_linkerd

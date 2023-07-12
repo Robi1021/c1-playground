@@ -1,9 +1,0 @@
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: not-important
-spec:
-  template:
-    spec:
-      imagePullSecrets:
-      - name: regcred
