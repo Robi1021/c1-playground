@@ -59,6 +59,7 @@ Add-On | **Ubuntu**<br>*Local* | **MacOS**<br>*Local* | **Cloud9**<br>*Local* | 
 Scanning Scripts | X | X | X | X | X | X
 C1CS Admission & Continuous | X | X | X | X | X | X
 C1CS Runtime Security | X | | X | X | X | X
+C1CS Artifact Scan aaS | X | X | X | X | X | X
 
 *Local* means, the cluster will run on the machine you're working on.
 
