@@ -2,71 +2,15 @@
     "cluster_name": "playground",
     "services": [
         {
-            "name": "playground-registry",
-            "namespace": "registry",
-            "size": "10Gi",
-            "port": "5000",
-            "username": "admin",
-            "password": "trendmicro",
-            "hostname": "playground-registry"
-        },
-        {
-            "name": "grafana",
-            "namespace": "prometheus",
-            "username": "admin",
-            "password": "trendmicro",
-            "hostname": "grafana",
-            "proxy_service_name": "prometheus-grafana",
-            "proxy_service_port": "80",
-            "proxy_listen_port": "8080"
-        },
-        {
-            "name": "prometheus",
-            "namespace": "prometheus",
-            "username": "admin",
-            "password": "trendmicro",
-            "hostname": "prometheus",
-            "proxy_service_name": "prometheus-kube-prometheus-prometheus",
-            "proxy_service_port": "9090",
-            "proxy_listen_port": "8081"
-        },
-        {
-            "name": "falco",
-            "namespace": "falco",
-            "hostname": "falco",
-            "proxy_service_name": "falco-falcosidekick-ui",
-            "proxy_service_port": "2802",
-            "proxy_listen_port": "8082"
-        },
-        {
-            "name": "smartcheck",
-            "namespace": "trendmicro-smartcheck",
-            "username": "admin",
-            "password": "trendmicro",
-            "hostname": "smartcheck",
-            "reg_username": "admin",
-            "reg_password": "trendmicro",
-            "reg_hostname": "smartcheck-registry",
-            "proxy_service_name": "proxy",
-            "proxy_service_port": "443",
-            "proxy_listen_port": "8443"
+            "name": "cloudone",
+            "region": "us-1",
+            "instance": "cloudone",
+            "api_key": "YOUR KEY HERE"
         },
         {
             "name": "container_security",
             "policy_name": "relaxed_playground",
             "namespace": "trendmicro-system"
-        },
-        {
-            "name": "trivy",
-            "namespace": "trivy"
-        },
-        {
-            "name": "starboard",
-            "namespace": "starboard"
-        },
-        {
-            "name": "opa",
-            "namespace": "opa"
         },
         {
             "name": "kube-system",
@@ -79,34 +23,6 @@
         {
             "name": "cadvisor",
             "namespace": "cadvisor"
-        },
-        {
-            "name": "harbor",
-            "namespace": "harbor",
-            "common_name": "172.250.255.5",
-            "admin_password": "trendmicro",
-            "reg_username": "admin",
-            "reg_password": "trendmicro",
-            "reg_htpasswd": "admin:$2y$10$lA2oNWrQ0WEvIzRs/1FxiOIzmW0GA1s8wjXHYa7C.Dsw0/8z47u8u",
-            "proxy_service_name": "harbor",
-            "proxy_service_port": "443",
-            "proxy_listen_port": "8085"
-        },
-        {
-            "name": "pipeline",
-            "github_username": "mawinkler",
-            "github_email": "winkler.info@icloud.com",
-            "github_project": "c1-app-sec-uploader",
-            "docker_username": "YOUR USERNAME HERE",
-            "docker_password": "YOUR PASSWORD HERE",
-            "appsec_key": "YOUR KEY HERE",
-            "appsec_secret": "YOUR SECRET HERE"
-        },
-        {
-            "name": "cloudone",
-            "region": "trend-us-1",
-            "instance": "cloudone",
-            "api_key": "YOUR KEY HERE"
         }
     ]
 }
