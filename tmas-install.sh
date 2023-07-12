@@ -46,3 +46,14 @@ then
     echo "Creating symbolic link from c1cs to tmas to maintain compatibility. Note: this might be removed in the future."
     sudo ln -sf /usr/local/bin/tmas /usr/local/bin/c1cs
 fi
+
+echo 
+echo "TMAS installed succesfully"
+echo
+echo "Please export your API key first, using:"
+echo "export CLOUD_ONE_API_KEY=YOUR_API_KEY_HERE"
+echo
+echo "Do the Login to the Registry, like for AWS ECR"
+echo "aws ecr get-login-password --region YOUR_AWS_REGION | docker login --username AWS --password-stdin YOUR_AWS_ACCOUNT_NR.dkr.ecr.YOUR_AWS_REGION.amazonaws.com"
+echo
+echo "Details about TMAS here: https://cloudone.trendmicro.com/docs/container-security/tmas-about/"
