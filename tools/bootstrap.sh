@@ -16,6 +16,7 @@ unset AWS_DEFAULT_REGION
 REPO=https://raw.githubusercontent.com/robi1021/c1-playground/master
 
 # Installing essentials
+sudo apt update
 sudo apt install -y jq apt-transport-https gnupg2 curl nginx apache2-utils pv
 # Install AWS CLI v2
 curl -fsSL ${REPO}/tools/aws2-install.sh | bash
