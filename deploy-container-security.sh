@@ -213,7 +213,8 @@ function deploy_container_security() {
   fi
 
   printf '%s\n' "(Re-)deploy container security"
-  curl -s -L https://github.com/trendmicro/cloudone-container-security-helm/archive/master.tar.gz -o master-cs.tar.gz
+  #curl -s -L https://github.com/trendmicro/cloudone-container-security-helm/archive/master.tar.gz -o master-cs.tar.gz
+  curl -s -L https://github.com/trendmicro/cloudone-container-security-helm/archive/2.3.14.tar.gz -o master-cs.tar.gz
   helm upgrade \
     container-security \
     --values overrides/container-security-overrides.yaml \
