@@ -13,6 +13,13 @@ unset AWS_ACCESS_KEY_ID
 unset AWS_SECRET_ACCESS_KEY
 unset AWS_DEFAULT_REGION
 
+REPO=https://raw.githubusercontent.com/robi1021/c1-playground/master
+
+# Installing essentials
+sudo apt install -y jq apt-transport-https gnupg2 curl nginx apache2-utils pv
+# Install AWS CLI v2
+curl -fsSL ${REPO}/tools/aws2-install.sh | bash
+
 # Checking credentials
 if [[ $(aws sts get-caller-identity --query Arn 2> /dev/null | grep assumed-role) =~ "ekscluster" ]]; then
   echo Instance role set
@@ -43,11 +50,6 @@ if [ "$FAIL" == "1" ]; then
   exit 0
 fi
 
-REPO=https://raw.githubusercontent.com/mawinkler/c1-playground/master
-
-# Installing essentials
-sudo apt install -y jq apt-transport-https gnupg2 curl nginx apache2-utils pv
-
 # Create and assign instance role
 if [[ $(aws sts get-caller-identity --query Arn 2> /dev/null | grep assumed-role) =~ "ekscluster" ]]; then
   echo
@@ -59,9 +61,6 @@ else
     AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} \
     /tmp/cloud9-instance-role.sh
 fi
-
-# Install AWS CLI v2
-curl -fsSL ${REPO}/tools/aws2-install.sh | bash
 
 # Unset AWS credentials
 unset AWS_ACCESS_KEY_ID
